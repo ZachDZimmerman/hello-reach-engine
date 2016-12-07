@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
+import Dropdown from 'react-dropdown'
 
 class Search extends React.Component {
 
@@ -50,7 +51,7 @@ class Search extends React.Component {
 	}
 
 	search() {
-		// build the search url, the call the server for data.
+		// build the search url, then call the server for data.
 		var offsetLimit = `OFFSET ${this.state.offset} SIZE ${this.state.limit} ORDER_BY dateUpdated DESC`;
 		var assetTypes = `types=video&types=image&types=document&types=other&types=collection&types=audio&types=clip&types=project`;
 		var searchUrl = `reachengine/api/inventory/search?${assetTypes}&rql=${offsetLimit}&keywords=${this.state.keywords}`;
