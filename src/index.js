@@ -3,6 +3,7 @@ import { render } from "react-dom";
 import React, {Component} from "react";
 import App from "./components/App";
 import AssetPage from "./components/AssetPage";
+import Workflow from "./components/Workflow";
 import Search from "./components/Search";
 import style from './style.css';
 

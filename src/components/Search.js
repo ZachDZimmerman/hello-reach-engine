@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
-import Dropdown from 'react-dropdown'
+import Workflow from "../components/Workflow";
 
 class Search extends React.Component {
 
@@ -112,7 +112,10 @@ class Search extends React.Component {
 				"customComponent": LinkComponent
 			}
 		];
-		return <Griddle
+		return
+		<div>
+			<Workflow />
+			<Griddle
 			useExternal={true}
 			externalSetFilter={::this.setFilter}
 			externalSetPage={::this.setPage}
@@ -123,6 +126,7 @@ class Search extends React.Component {
 			columns={this.state.searchHeaders}
 			columnMetadata={columnMeta}
 			showFilter={true}/>;
+		</div>
 	}
 }
 
