@@ -112,9 +112,13 @@ class Search extends React.Component {
 				"customComponent": LinkComponent
 			}
 		];
-		return
+		return (
 		<div>
-			<Workflow />
+			<Workflow
+			options={this.props.options}
+			onChange={this._onSelect}
+			value={this.props.defaultOption}
+		/>
 			<Griddle
 			useExternal={true}
 			externalSetFilter={::this.setFilter}
@@ -126,7 +130,7 @@ class Search extends React.Component {
 			columns={this.state.searchHeaders}
 			columnMetadata={columnMeta}
 			showFilter={true}/>;
-		</div>
+		</div> )
 	}
 }
 
