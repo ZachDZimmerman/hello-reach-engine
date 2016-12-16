@@ -23,7 +23,7 @@ class Search extends React.Component {
 			searchHeaders: headers,
 			offset: 0,
 			page: 0,
-			total:0,
+			total: 0,
 			limit: 25,
 			keywords: ""
 		};
@@ -115,7 +115,7 @@ class Search extends React.Component {
 		return (
 		<div>
 			<Workflow
-			options={this.props.options}
+			options={this.props.workflowData}
 			onChange={this._onSelect}
 			value={this.props.defaultOption}
 		/>
