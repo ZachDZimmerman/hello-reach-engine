@@ -115,9 +115,8 @@ class Search extends React.Component {
 		return (
 		<div>
 			<Workflow
-			options={this.props.workflowData}
+			options={this.props.test}
 			onChange={this._onSelect}
-			value={this.props.defaultOption}
 		/>
 			<Griddle
 			useExternal={true}

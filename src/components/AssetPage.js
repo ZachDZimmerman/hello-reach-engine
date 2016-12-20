@@ -9,6 +9,8 @@ class AssetPage extends Component {
         this.state = {
             asset: {},
             assetMetadata: {},
+						workflow: {},
+						workflowId: {},
             streamingUrl: '',
             mimeType: '',
             height: '',
@@ -16,7 +18,6 @@ class AssetPage extends Component {
         };
 
     }
-
     componentDidMount() {
         // First, load the asset
         this.getAsset()
@@ -31,6 +32,40 @@ class AssetPage extends Component {
 
                 // Now retrieve the Asset content so it can be displayed
                 this.getAssetContentUrl();
+            });
+				this.getWorkflow()
+						.then(workflow => {
+								this.setState({workflow: workflow});
+
+								return this.getWorkflowId(workflow.id);
+						}).then(workflowId => {
+								this.setState({workflowId: workflowId});
+						});
+    }
+
+		getWorkflow() {
+				// Get workflow from the Url params
+				let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+				// Workflow records are retrieved through the workflows api
+				return request
+						.get(`${reachEngineUrl}/reachengine/api/workflows/${201}`)
+						.set(sessionKeyHeader)
+						.type('application/json')
+						.promise()
+						.then(res => {
+								return res.body;
+						});
+		}
+
+		getWorkflowId(workflowId) {
+        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        return request
+            .get(`${reachEngineUrl}/reachengine/api/workflows/${workflowId}`)
+            .set(sessionKeyHeader)
+            .type('application/json')
+            .promise()
+            .then(res => {
+                return res.body;
             });
     }
 
@@ -291,6 +326,17 @@ class AssetPage extends Component {
                         <pre>{JSON.stringify(this.state.proxyContent, null, 2)}</pre>
                     </aside>
                 </section>
+								<section>
+									<h2>Workflow Content</h2>
+									<summary>
+											<div>Workflow ID: {this.state.workflow.id}</div>
+											<div>Last Updated at: {this.state.workflow.lastUpdated}</div>
+									</summary>
+									<aside>
+										<div>Workflow API: reachengine/api/workflows/{this.state.workflow.id}</div>
+										<pre>{JSON.stringify(this.state.workflowId, null, 2)}</pre>
+									</aside>
+								</section>
             </div>
         );
     }
