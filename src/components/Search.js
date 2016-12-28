@@ -6,16 +6,16 @@ import 'react-select/dist/react-select.css';
 
 
 var test = [
-	{value: 1, label: 'Convert List to Collection'},
-	{value: 2, label: 'Enable Collection Watch Folder'},
-	{value: 3, label: 'Generate Timeline Proxies'},
-	{value: 4, label: 'Ingest Asset'},
-	{value: 5, label: 'Ingest Asset to Collection'},
-	{value: 6, label: 'Ingest To Folder Collection'},
-	{value: 7, label: 'Export Collection to NLE'},
-	{value: 8, label: 'Create Collection Repository'},
-	{value: 9, label: 'Post A Clip to Youtube'},
-	{value: 10, label: 'Upgrade Timeline'}
+	{label: 'Convert List to Collection'},
+	{label: 'Enable Collection Watch Folder'},
+	{label: 'Generate Timeline Proxies'},
+	{label: 'Ingest Asset'},
+	{label: 'Ingest Asset to Collection'},
+	{label: 'Ingest To Folder Collection'},
+	{label: 'Export Collection to NLE'},
+	{label: 'Create Collection Repository'},
+	{label: 'Post A Clip to Youtube'},
+	{label: 'Upgrade Timeline'}
 ]
 
 class Search extends React.Component {

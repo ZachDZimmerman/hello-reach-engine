@@ -10,7 +10,7 @@ class AssetPage extends Component {
             asset: {},
             assetMetadata: {},
 						workflow: {},
-						workflowId: {},
+						// workflowName: {},
             streamingUrl: '',
             mimeType: '',
             height: '',
@@ -33,13 +33,10 @@ class AssetPage extends Component {
                 // Now retrieve the Asset content so it can be displayed
                 this.getAssetContentUrl();
             });
+						// Loading Global Workflows data
 				this.getWorkflow()
 						.then(workflow => {
 								this.setState({workflow: workflow});
-
-								return this.getWorkflowId(workflow.id);
-						}).then(workflowId => {
-								this.setState({workflowId: workflowId});
 						});
     }
 
@@ -48,7 +45,7 @@ class AssetPage extends Component {
 				let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 				// Workflow records are retrieved through the workflows api
 				return request
-						.get(`${reachEngineUrl}/reachengine/api/workflows/${201}`)
+						.get(`${reachEngineUrl}/reachengine/api/workflows?fetchLimit=100&includeCommon=true&userCanExecuteOnly=true`)
 						.set(sessionKeyHeader)
 						.type('application/json')
 						.promise()
@@ -56,18 +53,6 @@ class AssetPage extends Component {
 								return res.body;
 						});
 		}
-
-		getWorkflowId(workflowId) {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
-        return request
-            .get(`${reachEngineUrl}/reachengine/api/workflows/${workflowId}`)
-            .set(sessionKeyHeader)
-            .type('application/json')
-            .promise()
-            .then(res => {
-                return res.body;
-            });
-    }
 
     getAssetContentUrl() {
         // Get asset type and id from the Url params
@@ -285,6 +270,14 @@ class AssetPage extends Component {
     }
 
     render() {
+			// Array of the Global Workflows
+			var workflowNames = this.state.workflow.workflows;
+
+			// Checking to see if workflowNames is undefined
+				if (!workflowNames) {
+					return null;
+				}
+				console.log(workflowNames);
         let { type, id } = this.props.params;
         let contentProxyType = type;
         if (type === 'clip') {
@@ -329,12 +322,12 @@ class AssetPage extends Component {
 								<section>
 									<h2>Workflow Content</h2>
 									<summary>
-											<div>Workflow ID: {this.state.workflow.id}</div>
+											<div>Global Workflow Name: {this.state.workflow.id}</div>
 											<div>Last Updated at: {this.state.workflow.lastUpdated}</div>
+											<div>Workflow API: reachengine/api/workflows?/{this.state.workflow.id}</div>
 									</summary>
 									<aside>
-										<div>Workflow API: reachengine/api/workflows?/{this.state.workflow.id}</div>
-										<pre>{JSON.stringify(this.state.workflow, null, 2)}</pre>
+										<pre>{JSON.stringify(this.state.workflow.workflows, null, 2)}</pre>
 									</aside>
 								</section>
             </div>
