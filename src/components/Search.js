@@ -1,7 +1,22 @@
 import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
-import Workflow from "../components/Workflow";
+import Select from "react-select";
+import 'react-select/dist/react-select.css';
+
+
+var test = [
+	{value: 1, label: 'Convert List to Collection'},
+	{value: 2, label: 'Enable Collection Watch Folder'},
+	{value: 3, label: 'Generate Timeline Proxies'},
+	{value: 4, label: 'Ingest Asset'},
+	{value: 5, label: 'Ingest Asset to Collection'},
+	{value: 6, label: 'Ingest To Folder Collection'},
+	{value: 7, label: 'Export Collection to NLE'},
+	{value: 8, label: 'Create Collection Repository'},
+	{value: 9, label: 'Post A Clip to Youtube'},
+	{value: 10, label: 'Upgrade Timeline'}
+]
 
 class Search extends React.Component {
 
@@ -98,6 +113,10 @@ class Search extends React.Component {
 		this.setState({searchData: results});
 	}
 
+	logChange(val) {
+	    console.log("Selected: " + val);
+	}
+
 	render() {
 		var LinkComponent = React.createClass({
 			render: function() {
@@ -114,9 +133,12 @@ class Search extends React.Component {
 		];
 		return (
 		<div>
-			<Workflow
-			options={this.props.test}
-			onChange={this._onSelect}
+			<Select
+			options={test}
+			onChange={this.state.logChange}
+			placeholder="Select a Global Workflow"
+			searchable={false}
+			clearable={false}
 		/>
 			<Griddle
 			useExternal={true}
@@ -129,7 +151,8 @@ class Search extends React.Component {
 			columns={this.state.searchHeaders}
 			columnMetadata={columnMeta}
 			showFilter={true}/>;
-		</div> )
+		</div>
+		)
 	}
 }
 

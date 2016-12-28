@@ -333,8 +333,8 @@ class AssetPage extends Component {
 											<div>Last Updated at: {this.state.workflow.lastUpdated}</div>
 									</summary>
 									<aside>
-										<div>Workflow API: reachengine/api/workflows/{this.state.workflow.id}</div>
-										<pre>{JSON.stringify(this.state.workflowId, null, 2)}</pre>
+										<div>Workflow API: reachengine/api/workflows?/{this.state.workflow.id}</div>
+										<pre>{JSON.stringify(this.state.workflow, null, 2)}</pre>
 									</aside>
 								</section>
             </div>
