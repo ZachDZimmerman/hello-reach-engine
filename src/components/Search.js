@@ -34,6 +34,7 @@ class Search extends React.Component {
 
 		// initial search state.
 		this.state = {
+			workflow: {},
 			searchData: [],
 			searchHeaders: headers,
 			offset: 0,
@@ -45,10 +46,27 @@ class Search extends React.Component {
 	}
 
 	componentDidMount() {
+		// Loading Global Workflows data
+		this.getWorkflow()
+		.then(workflow => {
+				this.setState({workflow: workflow});
+		});
 		// initial search when we load.
 		this.search();
 	}
-
+	getWorkflow() {
+			// Get workflow from the Url params
+			let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+			// Workflow records are retrieved through the workflows api
+			return request
+					.get(`${reachEngineUrl}/reachengine/api/workflows?fetchLimit=100&includeCommon=true&userCanExecuteOnly=true`)
+					.set(sessionKeyHeader)
+					.type('application/json')
+					.promise()
+					.then(res => {
+							return res.body;
+					});
+	}
 	//what page is currently viewed
 	setPage(index){
 		// set the offset and page, then search
@@ -113,11 +131,14 @@ class Search extends React.Component {
 		this.setState({searchData: results});
 	}
 
-	logChange(val) {
-	    console.log("Selected: " + val);
-	}
-
 	render() {
+		var WorkflowArray = this.state.workflow.workflows;
+
+		if(!this.state.workflow) {
+			return null;
+		}
+		console.log(WorkflowArray);
+
 		var LinkComponent = React.createClass({
 			render: function() {
 				var url ="#/assets/" + this.props.rowData.inventoryKey + "/"+ this.props.rowData.id;

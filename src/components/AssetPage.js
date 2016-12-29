@@ -9,8 +9,6 @@ class AssetPage extends Component {
         this.state = {
             asset: {},
             assetMetadata: {},
-						workflow: {},
-						// workflowName: {},
             streamingUrl: '',
             mimeType: '',
             height: '',
@@ -33,27 +31,7 @@ class AssetPage extends Component {
                 // Now retrieve the Asset content so it can be displayed
                 this.getAssetContentUrl();
             });
-						// Loading Global Workflows data
-				this.getWorkflow()
-						.then(workflow => {
-								this.setState({workflow: workflow});
-						});
     }
-
-		getWorkflow() {
-				// Get workflow from the Url params
-				let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
-				// Workflow records are retrieved through the workflows api
-				return request
-						.get(`${reachEngineUrl}/reachengine/api/workflows?fetchLimit=100&includeCommon=true&userCanExecuteOnly=true`)
-						.set(sessionKeyHeader)
-						.type('application/json')
-						.promise()
-						.then(res => {
-								return res.body;
-						});
-		}
-
     getAssetContentUrl() {
         // Get asset type and id from the Url params
         let { type, id } = this.props.params;
