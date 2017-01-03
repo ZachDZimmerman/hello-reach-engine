@@ -34,7 +34,7 @@ class Search extends React.Component {
 
 		// initial search state.
 		this.state = {
-			workflow: {},
+			workflow: [],
 			searchData: [],
 			searchHeaders: headers,
 			offset: 0,
@@ -46,27 +46,46 @@ class Search extends React.Component {
 	}
 
 	componentDidMount() {
-		// Loading Global Workflows data
-		this.getWorkflow()
-		.then(workflow => {
-				this.setState({workflow: workflow});
-		});
 		// initial search when we load.
 		this.search();
+		// Loading Global Workflows data
+		this.getWorkflow();
 	}
 	getWorkflow() {
 			// Get workflow from the Url params
-			let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+			let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 			// Workflow records are retrieved through the workflows api
-			return request
-					.get(`${reachEngineUrl}/reachengine/api/workflows?fetchLimit=100&includeCommon=true&userCanExecuteOnly=true`)
-					.set(sessionKeyHeader)
-					.type('application/json')
-					.promise()
-					.then(res => {
-							return res.body;
-					});
+			request
+				.get(`${reachEngineUrl}/reachengine/api/workflows?fetchLimit=100&includeCommon=true&userCanExecuteOnly=true`)
+				.set(sessionKeyHeader)
+				.type('application/json')
+				.promise()
+				.then(res => {
+						this.setState({workflow: res.body.workflows});
+						this.sortGlobalWorkflowNames();
+				});
 	}
+	// Sorting Workflows
+	sortGlobalWorkflowNames() {
+		var workflowNameData = this.state.workflow;
+		// var GlobalWorkflows = [];
+		var getTheData = workflowNameData.map(function(GlobalWorkflows) {
+			return GlobalWorkflows.name;
+		});
+		console.log(getTheData);
+		//for loop to add value as a key inside of the options object
+		// for (var i = 0; i <= namesofGlobalWorkflows.length; i++) {
+		// 	var addValueLabel = 'value: ' + namesofGlobalWorkflows[i] + ',' + '' + 'label: ' + namesofGlobalWorkflows[i];
+		// }
+		this.setState({workflow: getTheData});
+		//
+		//
+		// var namesForWorkflows = this.state.workflow.name.length;
+		// for (var i = 0; i < namesForWorkflows; i++) {
+		// 	namesForWorkflows[i].push(namesofGlobalWorkflows)
+		// }
+	}
+
 	//what page is currently viewed
 	setPage(index){
 		// set the offset and page, then search
@@ -110,7 +129,8 @@ class Search extends React.Component {
 
 			if (asset.inventoryKey === 'collection'
 				|| asset.inventoryKey === 'audio'
-				|| asset.inventoryKey === 'project'){
+				|| asset.inventoryKey === 'project')
+				{
 
 				// no thumbs for these.
 				asset.thumbnail="";
@@ -132,12 +152,10 @@ class Search extends React.Component {
 	}
 
 	render() {
-		var WorkflowArray = this.state.workflow.workflows;
-
+		// For console logging
 		if(!this.state.workflow) {
 			return null;
 		}
-		console.log(WorkflowArray);
 
 		var LinkComponent = React.createClass({
 			render: function() {
@@ -155,7 +173,7 @@ class Search extends React.Component {
 		return (
 		<div>
 			<Select
-			options={test}
+			options={this.state.workflow}
 			onChange={this.state.logChange}
 			placeholder="Select a Global Workflow"
 			searchable={false}
