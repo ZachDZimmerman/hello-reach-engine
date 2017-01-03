@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
-import Select from "react-select";
-import 'react-select/dist/react-select.css';
+import Dropdown from "react-dropdown";
+import 'react-dropdown/style.css';
 
 
 var test = [
@@ -62,27 +62,29 @@ class Search extends React.Component {
 				.promise()
 				.then(res => {
 						this.setState({workflow: res.body.workflows});
-						this.sortGlobalWorkflowNames();
+						this.getGlobalWorkflowNames();
 				});
 	}
-	// Sorting Workflows
-	sortGlobalWorkflowNames() {
-		var workflowNameData = this.state.workflow;
-		// var GlobalWorkflows = [];
-		var getTheData = workflowNameData.map(function(GlobalWorkflows) {
-			return GlobalWorkflows.name;
+	//Get Global Workflow Names
+	getGlobalWorkflowNames() {
+		var GlobalWorkflowNameArray = this.state.workflow.map(function(globalWorkflows) {
+			return globalWorkflows.name;
 		});
-		console.log(getTheData);
+		console.log(GlobalWorkflowNameArray);
+
+		var GlobalWorkflowNameObject = {};
+
 		//for loop to add value as a key inside of the options object
-		// for (var i = 0; i <= namesofGlobalWorkflows.length; i++) {
-		// 	var addValueLabel = 'value: ' + namesofGlobalWorkflows[i] + ',' + '' + 'label: ' + namesofGlobalWorkflows[i];
-		// }
-		this.setState({workflow: getTheData});
+		for (var i = 0; i <= GlobalWorkflowNameArray.length; i++) {
+			var addValueLabel = 'value:' + '' + GlobalWorkflowNameArray[i] + ',' + '' + 'label:' + '' + GlobalWorkflowNameArray[i];
+
+		}
+		this.setState({workflow: GlobalWorkflowNameArray});
 		//
 		//
 		// var namesForWorkflows = this.state.workflow.name.length;
 		// for (var i = 0; i < namesForWorkflows; i++) {
-		// 	namesForWorkflows[i].push(namesofGlobalWorkflows)
+		// 	namesForWorkflows[i].push(GlobalWorkflowNames)
 		// }
 	}
 
@@ -172,12 +174,10 @@ class Search extends React.Component {
 		];
 		return (
 		<div>
-			<Select
+			<Dropdown
 			options={this.state.workflow}
-			onChange={this.state.logChange}
+			onChange={this._onSelect}
 			placeholder="Select a Global Workflow"
-			searchable={false}
-			clearable={false}
 		/>
 			<Griddle
 			useExternal={true}
