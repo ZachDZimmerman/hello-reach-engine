@@ -4,20 +4,6 @@ import Griddle from "griddle-react";
 import Dropdown from "react-dropdown";
 import 'react-dropdown/style.css';
 
-
-var test = [
-	{label: 'Convert List to Collection'},
-	{label: 'Enable Collection Watch Folder'},
-	{label: 'Generate Timeline Proxies'},
-	{label: 'Ingest Asset'},
-	{label: 'Ingest Asset to Collection'},
-	{label: 'Ingest To Folder Collection'},
-	{label: 'Export Collection to NLE'},
-	{label: 'Create Collection Repository'},
-	{label: 'Post A Clip to Youtube'},
-	{label: 'Upgrade Timeline'}
-]
-
 class Search extends React.Component {
 
 	constructor(props, context) {
@@ -51,6 +37,9 @@ class Search extends React.Component {
 		// Loading Global Workflows data
 		this.getWorkflow();
 	}
+	onSelect() {
+		console.log("Selected");
+	}
 	getWorkflow() {
 			// Get workflow from the Url params
 			let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
@@ -70,22 +59,7 @@ class Search extends React.Component {
 		var GlobalWorkflowNameArray = this.state.workflow.map(function(globalWorkflows) {
 			return globalWorkflows.name;
 		});
-		console.log(GlobalWorkflowNameArray);
-
-		var GlobalWorkflowNameObject = {};
-
-		//for loop to add value as a key inside of the options object
-		for (var i = 0; i <= GlobalWorkflowNameArray.length; i++) {
-			var addValueLabel = 'value:' + '' + GlobalWorkflowNameArray[i] + ',' + '' + 'label:' + '' + GlobalWorkflowNameArray[i];
-
-		}
 		this.setState({workflow: GlobalWorkflowNameArray});
-		//
-		//
-		// var namesForWorkflows = this.state.workflow.name.length;
-		// for (var i = 0; i < namesForWorkflows; i++) {
-		// 	namesForWorkflows[i].push(GlobalWorkflowNames)
-		// }
 	}
 
 	//what page is currently viewed
@@ -176,7 +150,7 @@ class Search extends React.Component {
 		<div>
 			<Dropdown
 			options={this.state.workflow}
-			onChange={this._onSelect}
+			onChange={this.onSelect}
 			placeholder="Select a Global Workflow"
 		/>
 			<Griddle

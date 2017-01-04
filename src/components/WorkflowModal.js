@@ -1,3 +1,16 @@
+import React, {Component, PropTypes} from "react";
+import request from "superagent-bluebird-promise";
+import Modal from "react-bootstrap";
+
+class Modal extends Component {
+
+    constructor(props, context) {
+        super(props, context);
+        // initial modal state.
+        this.state = {};
+	}
+
+
 // Array of the Global Workflows
 var workflowNames = this.state.workflow.workflows;
 
@@ -20,3 +33,6 @@ var workflowNames = this.state.workflow.workflows;
 							<pre>{JSON.stringify(this.state.workflow.workflows, null, 2)}</pre>
 						</aside>
 					</section>
+}
+
+export default Modal
