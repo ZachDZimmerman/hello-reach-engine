@@ -2,6 +2,7 @@ import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
 import Dropdown from "react-dropdown";
+import WorkflowModal from "./WorkflowModal";
 import 'react-dropdown/style.css';
 
 class Search extends React.Component {
@@ -37,8 +38,15 @@ class Search extends React.Component {
 		// Loading Global Workflows data
 		this.getWorkflow();
 	}
-	onSelect() {
-		console.log("Selected");
+	closeModal() {
+		this.setState({showModal: false});
+	}
+	openModal() {
+		this.setState({showModal: true})
+	}
+	onSelect(value) {
+		this.openModal();
+		console.log("Selected", value);
 	}
 	getWorkflow() {
 			// Get workflow from the Url params
@@ -150,7 +158,7 @@ class Search extends React.Component {
 		<div>
 			<Dropdown
 			options={this.state.workflow}
-			onChange={this.onSelect}
+			onChange={::this.onSelect}
 			placeholder="Select a Global Workflow"
 		/>
 			<Griddle
@@ -163,7 +171,14 @@ class Search extends React.Component {
 			results={this.state.searchData}
 			columns={this.state.searchHeaders}
 			columnMetadata={columnMeta}
-			showFilter={true}/>;
+			showFilter={true}
+		/>
+			<WorkflowModal
+			animaion={true}
+			show={this.state.showModal}
+			keyboard={true}
+			onHide={this.closeModal}
+		/>
 		</div>
 		)
 	}
