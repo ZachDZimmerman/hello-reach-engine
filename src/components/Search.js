@@ -22,7 +22,7 @@ class Search extends React.Component {
 		this.state = {
 			showModal: false,
 			workflowParams: [],
-			workflowIds: [],
+			workflowId: {},
 			GlobalWorkflowNames: [],
 			searchData: [],
 			searchHeaders: headers,
@@ -37,9 +37,11 @@ class Search extends React.Component {
 		// initial search when we load.
 		this.search();
 		// Loading Global Workflows data
-		this.getWorkflow();
-		// Loading Workflow params -WITH WORKFLOW ID-
-		this.getWorkflowParams();
+		this.getWorkflow()
+				.then(workflowId => {
+						this.setState({workflowId: workflowId})
+						console.log(this.state.workflowId);
+				});
 	}
 	getWorkflowParams() {
 		// Get workflow params from the Url params
@@ -52,7 +54,7 @@ class Search extends React.Component {
 			.promise()
 			.then(res => {
 						this.setState({workflowParams: res.body.rows})
-// For Workflow id params to be displayed in the Modal
+						// For Workflow id params to be displayed in the Modal
 						console.log(this.state.workflowParams);
 						// this.getWorkflowId();
 			});
@@ -63,13 +65,16 @@ class Search extends React.Component {
 	// 	});
 	// 	this.setState({workflowIds: GlobalWorkflowId});
 	// }
+	selectedId(id) {
+		Object.values(this[1])
+	}
 	closeModal() {
 		this.setState({showModal: false});
 	}
 	onSelect(id) {
 		this.getWorkflowParams(id);
 		this.setState({showModal: true});
-		console.log("Selected", id);
+		console.log("GET", id);
 	}
 	getWorkflow() {
 			// Get workflow from the Url
@@ -82,7 +87,7 @@ class Search extends React.Component {
 				.promise()
 				.then(res => {
 					// res.body.workflows is an array of objects that contains each Global Workflow
-					console.log(res.body);
+					console.log(res.body.workflows);
 						this.setState({GlobalWorkflowNames: res.body.workflows});
 						this.getGlobalWorkflowNames();
 				});
@@ -95,7 +100,7 @@ class Search extends React.Component {
 			}
 		});
 		this.setState({GlobalWorkflowNames: GlobalWorkflowsObject});
-		console.log(this.state.GlobalWorkflowNames);
+		// console.log(this.state.GlobalWorkflowNames);
 	}
 
 	//what page is currently viewed
@@ -188,6 +193,7 @@ class Search extends React.Component {
 			onHide={::this.closeModal}
 			onEnter={this.getWorkflowParams}
 			workflowParams={this.state.workflowParams}
+			// workflowId={}
 		/>
 		<Select
 			options={this.state.GlobalWorkflowNames}

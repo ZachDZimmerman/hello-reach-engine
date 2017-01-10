@@ -69,16 +69,19 @@ h1 {
     border-bottom: 1px solid #ededed;
 }
 .modal {
-		width: 60%;
-		max-height: 500px;
+		-webkit-box-shadow: 10px 10px 51px -1px rgba(0,0,0,0.75);
+		-moz-box-shadow: 10px 10px 51px -1px rgba(0,0,0,0.75);
+		box-shadow: 10px 10px 51px -1px rgba(0,0,0,0.75);
+		width: 800px;
+		max-height: 600px;
 		position: absolute;
 		top: 9.5%;
-		left: 20%;
+		left: 23%;
 		background-color: whitesmoke;
 		border-radius: 10px;
-		text-align: center;
 		z-index: 11;
-		border: 5px solid rgba(0, 0, 0, 0.3);
+		border: 3px solid rgba(0, 0, 0, 0.3);
+		overflow: auto;
 }
 input {
 		margin-bottom: 5px;
@@ -92,18 +95,27 @@ input {
 }
 #contained-modal-title-lg {
 		background: whitesmoke;
+		text-align: center;
 }
 .modal-body {
-		background: white;
+		font-size: 1.1em;
+		font-family: monospace, monospace;
+		line-height: 1.4em;
 		border-radius: 5px;
 		overflow: auto;
-		padding-left: 50px;
-    padding-right: 50px;
-    padding-bottom: 20px;
-    padding-top: 20px;
-		font-family: monospace, monospace;
-    font-size: 1em;
+		padding-right: 100px;
+		padding-bottom: 30px;
+		padding-top: 20px;
+		margin-left: 100px;
+		overflow: auto;
 }
 .modal-footer {
-	padding: 10px;
+	padding: 20px;
+	text-align: center;
+}
+aside.paddingModal {
+	padding-right: 160px;
+}
+.modal-content {
+	overflow: scroll;
 }

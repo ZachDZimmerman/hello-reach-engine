@@ -21,12 +21,13 @@ class AssetPage extends Component {
         this.getAsset()
             .then(asset => {
                 this.setState({asset: asset});
-
+								console.log(this.state.asset.metadataId);
                 // After retrieving the Asset the metadata can be fetched
                 return this.getAssetMetadata(asset.metadataId);
             })
             .then(assetMetadata => {
                 this.setState({assetMetadata: assetMetadata});
+								console.log(this.state.assetMetadata);
 
                 // Now retrieve the Asset content so it can be displayed
                 this.getAssetContentUrl();
@@ -112,7 +113,7 @@ class AssetPage extends Component {
     }
 
     getAsset() {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
         let { type, id } = this.props.params;
         // Asset records are retrieved through the inventory api
         let assetInventoryUrl = this.buildAssetInventoryUrl(type, id);
@@ -127,19 +128,20 @@ class AssetPage extends Component {
     }
 
     getAssetMetadata(metadataId) {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
         return request
             .get(`${reachEngineUrl}/reachengine/api/metadata/${metadataId}`)
             .set(sessionKeyHeader)
             .type('application/json')
             .promise()
             .then(res => {
+							console.log(res.body);
                 return res.body;
             });
     }
 
     getProxyContent() {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
         // Content is defined by content use (PROXY, SOURCE, MEZZANINE)
 
         // A Content record contains technical metadata about a specific file
@@ -159,7 +161,7 @@ class AssetPage extends Component {
     }
 
     getClipProxyContent(videoId) {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
         let assetInventoryUrl = this.buildAssetInventoryUrl('video', videoId);
         return request
             .get(`${reachEngineUrl}/${assetInventoryUrl}/proxy`)
@@ -172,7 +174,7 @@ class AssetPage extends Component {
     }
 
     getImageContentUrl(contentId) {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
         let sessionKey = sessionKeyHeader.__sessionkey;
 
         // By adding /raw to a content url we can load an image content proxy
@@ -183,7 +185,7 @@ class AssetPage extends Component {
 
 
     getAudioContentUrl() {
-        let { reachEngineUrl, sessionKeyHeader } = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader } = this.props.authenticationPayload;
         let sessionKey = sessionKeyHeader.__sessionkey;
 
         // Audo content can be retrieved as a sub resource of Inventory/Audio/Content
@@ -194,7 +196,7 @@ class AssetPage extends Component {
     }
 
     getVideoStreamingURL(videoId) {
-        let { reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+        let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 
         // Video streaming urls are requested through the secureStreamingUrl api
         // This returns a temporary url that is only valid for a limited duration as
