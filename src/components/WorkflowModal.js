@@ -1,46 +1,23 @@
 import React, {Component, PropTypes} from "react";
 import request from "superagent-bluebird-promise";
-import { Modal, Button } from "react-bootstrap";
+import Modal from "react-bootstrap/lib/Modal";
+import Button from "react-bootstrap/lib/Button";
 
 class WorkflowModal extends Component {
-
-    constructor(props) {
-        super(props);
-        // initial modal state.
-				// this.state = {
-				// 	show: false
-				// }
-				console.log("Hey", this.props.workflow);
-	}
-
-		render() {
-			// For console logging
-			if(!this.props.workflow) {
-				return null;
-			}
-
+		render(props) {
 			return (
-				<Modal show={this.props.show} bsSize="large" aria-labelledby="contained-modal-title-lg">
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-lg">Workflow Content</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-					<section>
-						<summary>
-								<div>Global Workflow Name: {this.props.workflow.id}</div>
-								<div>Last Updated at: {this.props.workflow.lastUpdated}</div>
-								<div>Workflow API: reachengine/api/workflows?/{this.props.workflow.id}</div>
-						</summary>
-						<aside>
-							<pre>{JSON.stringify(this.props.workflow, null, 2)}</pre>
-						</aside>
-					</section>
+				<Modal className="modal" show={this.props.show} bsSize="large" aria-labelledby="contained-modal-title-lg">
+        <h2><Modal.Title id="contained-modal-title-lg">Global Workflow Content</Modal.Title></h2>
+        <Modal.Body className="modal-body">
+					<div>
+						{JSON.stringify(this.props.workflowParams, null, 1)}
+					</div>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="modal-footer">
           <Button onClick={this.props.onHide}>Close</Button>
         </Modal.Footer>
-      </Modal>
-				)
+	      </Modal>
+			)
 		}
 }
 

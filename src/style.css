@@ -8,6 +8,7 @@
 
 html,
 body {
+		position: relative;
     margin: 0;
     padding: 0;
     width: 100%;
@@ -42,9 +43,9 @@ section {
 }
 
 section > summary {
-  vertical-align: top;
-  display: inline-block;
-  min-width: 400px;
+  	vertical-align: top;
+  	display: inline-block;
+  	min-width: 400px;
 }
 
 section > aside {
@@ -66,4 +67,43 @@ h1 {
     padding: 50px;
     background: white;
     border-bottom: 1px solid #ededed;
+}
+.modal {
+		width: 60%;
+		max-height: 500px;
+		position: absolute;
+		top: 9.5%;
+		left: 20%;
+		background-color: whitesmoke;
+		border-radius: 10px;
+		text-align: center;
+		z-index: 11;
+		border: 5px solid rgba(0, 0, 0, 0.3);
+}
+input {
+		margin-bottom: 5px;
+		margin-top: 2.5px;
+		padding: 5px;
+}
+.Select-placeholder {
+		margin-top: 2px;
+		text-align: center;
+		font-weight: bold;
+}
+#contained-modal-title-lg {
+		background: whitesmoke;
+}
+.modal-body {
+		background: white;
+		border-radius: 5px;
+		overflow: auto;
+		padding-left: 50px;
+    padding-right: 50px;
+    padding-bottom: 20px;
+    padding-top: 20px;
+		font-family: monospace, monospace;
+    font-size: 1em;
+}
+.modal-footer {
+	padding: 10px;
 }

@@ -1,12 +1,11 @@
 import React, {Component} from "react";
 import request from "superagent-bluebird-promise";
 import Griddle from "griddle-react";
-import Dropdown from "react-dropdown";
+import Select from "react-select";
 import WorkflowModal from "./WorkflowModal";
-import 'react-dropdown/style.css';
+import 'react-select/dist/react-select.css';
 
 class Search extends React.Component {
-
 	constructor(props, context) {
 		super(props, context);
 
@@ -17,11 +16,14 @@ class Search extends React.Component {
 			"name",
 			"dateCreated",
 			"dateUpdated"
-		]
+		];
 
 		// initial search state.
 		this.state = {
-			workflow: [],
+			showModal: false,
+			workflowParams: [],
+			workflowIds: [],
+			GlobalWorkflowNames: [],
 			searchData: [],
 			searchHeaders: headers,
 			offset: 0,
@@ -31,25 +33,46 @@ class Search extends React.Component {
 			keywords: ""
 		};
 	}
-
 	componentDidMount() {
 		// initial search when we load.
 		this.search();
 		// Loading Global Workflows data
 		this.getWorkflow();
+		// Loading Workflow params -WITH WORKFLOW ID-
+		this.getWorkflowParams();
 	}
+	getWorkflowParams() {
+		// Get workflow params from the Url params
+		let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
+		// Workflow params are retrieved through the workflows api
+		return request
+			.get(`${reachEngineUrl}/reachengine/api/workflows/237/params?includeUserInput=true&includeRequired=true&includeOther=false`)
+			.set(sessionKeyHeader)
+			.type('application/json')
+			.promise()
+			.then(res => {
+						this.setState({workflowParams: res.body.rows})
+// For Workflow id params to be displayed in the Modal
+						console.log(this.state.workflowParams);
+						// this.getWorkflowId();
+			});
+	}
+	// getWorkflowId () {
+	// 	var GlobalWorkflowId = this.state.workflowIds.map(function(workflowId) {
+	// 		return workflowId.id;
+	// 	});
+	// 	this.setState({workflowIds: GlobalWorkflowId});
+	// }
 	closeModal() {
 		this.setState({showModal: false});
 	}
-	openModal() {
-		this.setState({showModal: true})
-	}
-	onSelect(value) {
-		this.openModal();
-		console.log("Selected", value);
+	onSelect(id) {
+		this.getWorkflowParams(id);
+		this.setState({showModal: true});
+		console.log("Selected", id);
 	}
 	getWorkflow() {
-			// Get workflow from the Url params
+			// Get workflow from the Url
 			let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 			// Workflow records are retrieved through the workflows api
 			request
@@ -58,16 +81,21 @@ class Search extends React.Component {
 				.type('application/json')
 				.promise()
 				.then(res => {
-						this.setState({workflow: res.body.workflows});
+					// res.body.workflows is an array of objects that contains each Global Workflow
+					console.log(res.body);
+						this.setState({GlobalWorkflowNames: res.body.workflows});
 						this.getGlobalWorkflowNames();
 				});
 	}
 	//Get Global Workflow Names
 	getGlobalWorkflowNames() {
-		var GlobalWorkflowNameArray = this.state.workflow.map(function(globalWorkflows) {
-			return globalWorkflows.name;
+		var GlobalWorkflowsObject = this.state.GlobalWorkflowNames.map(function(globalWorkflows) {
+			return {
+				label: globalWorkflows.name, id: globalWorkflows.id
+			}
 		});
-		this.setState({workflow: GlobalWorkflowNameArray});
+		this.setState({GlobalWorkflowNames: GlobalWorkflowsObject});
+		console.log(this.state.GlobalWorkflowNames);
 	}
 
 	//what page is currently viewed
@@ -126,7 +154,6 @@ class Search extends React.Component {
 					// clip thumbnail url pattern, from the videos api
 					thubmnailUrl = `/reachengine/api/inventory/videos/${asset.inventoryKey}s/${asset.id}/thumbnail/raw`;
 				}
-
 				// img tag for embed
 				asset.thumbnail=<img src={this.props.authenticationPayload.reachEngineUrl + thubmnailUrl + sessionKeyHeader} height="36"/>;
 			}
@@ -137,7 +164,7 @@ class Search extends React.Component {
 
 	render() {
 		// For console logging
-		if(!this.state.workflow) {
+		if(!this.state.GlobalWorkflowNames) {
 			return null;
 		}
 
@@ -156,28 +183,33 @@ class Search extends React.Component {
 		];
 		return (
 		<div>
-			<Dropdown
-			options={this.state.workflow}
+		<WorkflowModal
+			show={this.state.showModal}
+			onHide={::this.closeModal}
+			onEnter={this.getWorkflowParams}
+			workflowParams={this.state.workflowParams}
+		/>
+		<Select
+			options={this.state.GlobalWorkflowNames}
 			onChange={::this.onSelect}
 			placeholder="Select a Global Workflow"
+			searchable={false}
+			clearable={false}
+			// filterOptions={} method to filter the options array: function([options], filterString, [values])
+			// onValueClick={function} onClick handler for value labels: function (value, event) {}
 		/>
-			<Griddle
+		<Griddle
 			useExternal={true}
 			externalSetFilter={::this.setFilter}
 			externalSetPage={::this.setPage}
 			externalCurrentPage={this.state.page}
 			externalPageSize={this.state.limit}
 			externalMaxPage={Math.round(this.state.total/this.state.limit)}
+			// externalChangeSort={null}
 			results={this.state.searchData}
 			columns={this.state.searchHeaders}
 			columnMetadata={columnMeta}
 			showFilter={true}
-		/>
-			<WorkflowModal
-			animaion={true}
-			show={this.state.showModal}
-			keyboard={true}
-			onHide={this.closeModal}
 		/>
 		</div>
 		)
