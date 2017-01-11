@@ -123,6 +123,7 @@ class AssetPage extends Component {
             .type('application/json')
             .promise()
             .then(res => {
+							console.log(res.body);
                 return res.body;
             });
     }

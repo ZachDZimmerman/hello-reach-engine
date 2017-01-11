@@ -22,7 +22,7 @@ class Search extends React.Component {
 		this.state = {
 			showModal: false,
 			workflowParams: [],
-			workflowId: {},
+			workflowId: "",
 			GlobalWorkflowNames: [],
 			searchData: [],
 			searchHeaders: headers,
@@ -37,46 +37,32 @@ class Search extends React.Component {
 		// initial search when we load.
 		this.search();
 		// Loading Global Workflows data
-		this.getWorkflow()
-				.then(workflowId => {
-						this.setState({workflowId: workflowId})
-						console.log(this.state.workflowId);
-				});
+		this.getWorkflows();
+		// Loading the Global Workflow params
+		this.getWorkflowParams();
 	}
-	getWorkflowParams() {
+	getWorkflowParams(workflowId) {
 		// Get workflow params from the Url params
 		let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 		// Workflow params are retrieved through the workflows api
 		return request
-			.get(`${reachEngineUrl}/reachengine/api/workflows/237/params?includeUserInput=true&includeRequired=true&includeOther=false`)
+			.get(`${reachEngineUrl}/reachengine/api/workflows/${this.state.workflowId}/params?includeUserInput=true&includeRequired=true&includeOther=false`)
 			.set(sessionKeyHeader)
 			.type('application/json')
 			.promise()
 			.then(res => {
 						this.setState({workflowParams: res.body.rows})
-						// For Workflow id params to be displayed in the Modal
-						console.log(this.state.workflowParams);
-						// this.getWorkflowId();
 			});
-	}
-	// getWorkflowId () {
-	// 	var GlobalWorkflowId = this.state.workflowIds.map(function(workflowId) {
-	// 		return workflowId.id;
-	// 	});
-	// 	this.setState({workflowIds: GlobalWorkflowId});
-	// }
-	selectedId(id) {
-		Object.values(this[1])
 	}
 	closeModal() {
 		this.setState({showModal: false});
 	}
 	onSelect(id) {
-		this.getWorkflowParams(id);
+		// this.getWorkflowParams(id);
 		this.setState({showModal: true});
-		console.log("GET", id);
+		console.log("GET ", this.state.workflowId);
 	}
-	getWorkflow() {
+	getWorkflows() {
 			// Get workflow from the Url
 			let {reachEngineUrl, sessionKeyHeader} = this.props.authenticationPayload;
 			// Workflow records are retrieved through the workflows api
@@ -90,9 +76,12 @@ class Search extends React.Component {
 					console.log(res.body.workflows);
 						this.setState({GlobalWorkflowNames: res.body.workflows});
 						this.getGlobalWorkflowNames();
+						// For Workflow id params to be displayed in the Modal
+						// this.getWorkflowId();
+
 				});
 	}
-	//Get Global Workflow Names
+	//Get Global Workflow Values and Ids
 	getGlobalWorkflowNames() {
 		var GlobalWorkflowsObject = this.state.GlobalWorkflowNames.map(function(globalWorkflows) {
 			return {
@@ -100,7 +89,7 @@ class Search extends React.Component {
 			}
 		});
 		this.setState({GlobalWorkflowNames: GlobalWorkflowsObject});
-		// console.log(this.state.GlobalWorkflowNames);
+		console.log(this.state.GlobalWorkflowNames);
 	}
 
 	//what page is currently viewed

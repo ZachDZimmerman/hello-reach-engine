@@ -106,16 +106,16 @@ input {
 		padding-right: 100px;
 		padding-bottom: 30px;
 		padding-top: 20px;
-		margin-left: 100px;
+		margin-left: 120px;
 		overflow: auto;
 }
 .modal-footer {
-	padding: 20px;
-	text-align: center;
+		padding: 20px;
+		text-align: center;
 }
 aside.paddingModal {
-	padding-right: 160px;
+		padding-right: 160px;
 }
 .modal-content {
-	overflow: scroll;
+		overflow: scroll;
 }
